@@ -15,16 +15,16 @@ motor RBMotor = motor(PORT9, ratio6_1, false);
 motor LLift = motor(PORT3, ratio6_1, true);     // DR$B 升降機 
 motor RLift = motor(PORT8, ratio6_1, false);
 motor Claw = motor(PORT6, ratio18_1, true);
-motor LToggle = motor(PORT14, ratio18_1, true); // Toggle 
-motor RToggle = motor(PORT17, ratio18_1, false);
+motor LToggle = motor(PORT11, ratio18_1, true); // Toggle 
+motor RToggle = motor(PORT20, ratio18_1, false);
 
 bumper bpAuto = bumper(Brain.ThreeWirePort.A);   // Limit Switch
-inertial Inertial = inertial(PORT9);                 // Inertial 
+inertial Inertial = inertial(PORT4);                 // Inertial 
 
 motor_group Lift = motor_group(LLift,RLift);
 motor_group toggle = motor_group(LToggle, RToggle);
 
-drive MyChassis( motor_group(LBMotor,LFMotor), motor_group(RBMotor,RFMotor),inertial(PORT9));
+drive MyChassis( motor_group(LBMotor,LFMotor), motor_group(RBMotor,RFMotor),inertial(PORT4));
 
 void vexcodeInit( void ) {
   // nothing to initialize
