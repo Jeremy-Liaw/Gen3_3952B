@@ -8,7 +8,6 @@
 /*----------------------------------------------------------------------------*/
 
 #include "vex.h"   
-
 using namespace vex;
 
 int AutoEnd = 3;
@@ -56,7 +55,8 @@ void usercontrol(void) {
   Brain.Screen.clearScreen();
   task liftTask(DRlift);
   task rachetTask(rachet);
-  task toggleTask(Toggle);
+  task toggleTask(toggleSide);
+  //task LiftPosTask(liftTo);
   while (1) {
     MyChassis.controlMove(); // 底盤遙控  之後要加遙控曲線
     wait(20, msec);

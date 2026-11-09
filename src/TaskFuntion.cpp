@@ -1,12 +1,11 @@
 #include "vex.h"
-
 int DRlift()
 {
   while(1) 
   {
     if(Controller.ButtonL1.pressing()) 
     {
-      Lift.spin(forward, 100, pct);
+      Lift.spin(forward, 70, pct);
     } 
     else if(Controller.ButtonL2.pressing()) 
     {
@@ -21,12 +20,12 @@ int DRlift()
   return 0; 
 }
 
-int rachet() //TODO 不要手動開合，不好用
+int rachet() // TODO: 不要手動開合，不好用
 {
   while(1) {
     if(Controller.ButtonR2.pressing())
     {
-      Claw.spin(forward, 30, pct);
+      Claw.spin(forward, 47.5, pct);
     } 
     else if(Controller.ButtonR1.pressing()) 
     {
@@ -41,7 +40,7 @@ int rachet() //TODO 不要手動開合，不好用
   return 0;
 }
 
-int Toggle() //* 開程式前要將 toggle 結構轉成直的
+int toggleSide() //* 開程式前要將 toggle 結構轉成直的
 {
   while(1) 
   {
