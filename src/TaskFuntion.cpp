@@ -4,11 +4,11 @@ int DRlift()
 {
   while(1) 
   {
-    if(Controller.ButtonR1.pressing()) 
+    if(Controller.ButtonL1.pressing()) 
     {
       Lift.spin(forward, 100, pct);
     } 
-    else if(Controller.ButtonR2.pressing()) 
+    else if(Controller.ButtonL2.pressing()) 
     {
       Lift.stop(coast);
     } 
@@ -24,11 +24,11 @@ int DRlift()
 int rachet() //TODO 不要手動開合，不好用
 {
   while(1) {
-    if(Controller.ButtonL2.pressing())
+    if(Controller.ButtonR2.pressing())
     {
       Claw.spin(forward, 30, pct);
     } 
-    else if(Controller.ButtonL1.pressing()) 
+    else if(Controller.ButtonR1.pressing()) 
     {
       Claw.spin(reverse,100, pct);
     } 
@@ -50,7 +50,7 @@ int Toggle() //* 開程式前要將 toggle 結構轉成直的
     if(Controller.ButtonY.pressing())
     {
       toggle.setVelocity(100,pct);
-      toggle.spinFor(forward,180,deg,false);
+      toggle.spinFor(forward,-180,deg,false);
       while(Controller.ButtonY.pressing()) {wait(20, msec);}
     } 
     else if(fabs(LModToggle) >= 10)
