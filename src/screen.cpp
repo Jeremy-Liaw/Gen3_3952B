@@ -249,16 +249,16 @@ void  brainScreen(int AutoMode) {
   }//27 21
   // 升降 Toggle 夾子
   Brain.Screen.setFont(mono15);
-  Brain.Screen.printAt(370,85,"Cascade");
+  Brain.Screen.printAt(370,85,"DR4B");
   Brain.Screen.printAt(370,105,"Motor");
-  Brain.Screen.printAt(370,145,"Intake");
+  Brain.Screen.printAt(370,145,"Toggle");
   Brain.Screen.printAt(370,165,"Motor");
-  Brain.Screen.printAt(370,205,"Toggle");
+  Brain.Screen.printAt(370,205,"Intake");
   Brain.Screen.printAt(370,225,"Motor");
-  int MotorListY[4] = {66,93,126,153};
-  motor m2[4] = {LLift,RLift,LToggle,RToggle};
+  int MotorListY[5] = {66,93,126,153,185};
+  motor m2[5] = {LLift,RLift,LToggle,RToggle,Claw};
   int j = 0;
-  for(int i = 0; i<4; i++) {
+  for(int i = 0; i<5; i++) {
     bool Link = m2[i].installed();
     int Temperature = m2[i].temperature();
     char *Temp;
