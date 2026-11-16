@@ -99,12 +99,12 @@ void drive::goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,i
   double KeepDeg = 0;
   if (DegTar == -9999){ KeepDeg = IMU.heading(); }
   else{ KeepDeg = DegTar; }
-  LMotor.resetPosition();
-  RMotor.resetPosition();
+  double StrLMotor = LMotor.position(deg);
+  double StrRMotor = RMotor.position(deg);
   printf("-------------------------\n");
   printf("go to dis = %.2f Inch\n",Goal);
   while(true){
-    double AveDeg = (LMotor.position(deg) + RMotor.position(deg)) / 2; // 馬達平均旋轉角度
+    double AveDeg = ((LMotor.position(deg) - StrLMotor) + (RMotor.position(deg) - StrRMotor)) / 2; // 馬達平均旋轉角度
     double CurrentDistance = (AveDeg / 360) * (3.14159 * 2.75) * (36.0 / 48.0); // 單位換算 角度換英吋 
     // (AveDeg / 360)馬達圈數 (36.0 / 48.0)換成輪子的圈數 (3.14159 * 2.75)輪子轉一圈的距離
     double Error = Goal - CurrentDistance; // 到目標還有多遠

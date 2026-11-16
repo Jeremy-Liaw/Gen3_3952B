@@ -1,5 +1,5 @@
 #include "vex.h"
-
+#include "cstring"
 void drawMotor(int StrX, int StrY, int Buff) {
   Brain.Screen.setPenWidth(0); 
   for (int i = 0; i < 28; i++) {       
@@ -23,15 +23,16 @@ void drawMotor(int StrX, int StrY, int Buff) {
 void drawMotorLink(int StrX, int StrY, int Buff, const char* Temper, int Angle, bool NotLink) {
   Brain.Screen.setPenWidth(0); 
   int R,G,B;
-  if(Temper == "Green") {
+
+  if (strcmp(Temper, "Green") == 0) {
     R = 34; G = 177; B = 76;
-  } else if(Temper == "Yello") {
+  } else if (strcmp(Temper, "Yello") == 0) {
     R = 255; G = 194; B = 14;
-  } else if(Temper == "Orange") {
+  } else if (strcmp(Temper, "Orange") == 0) {
     R = 255; G = 126; B = 0;
-  }else if(Temper == "Red") {
+  } else if (strcmp(Temper, "Red") == 0) {
     R = 237; G = 28; B = 36;
-  }else if(Temper == "White") {
+  } else if (strcmp(Temper, "White") == 0) {
     R = 255; G = 255; B = 255;
   }
 
@@ -175,7 +176,7 @@ void  brainScreen(int AutoMode) {
   Brain.Screen.printAt(65,85,"[Auto Mode]");
   Brain.Screen.setFont(mono15);
   Brain.Screen.printAt(65,115,"Team Goal at ?");
-  int GoalX, GrayX, GoalY = 125;
+  int GoalX = 0, GrayX = 0, GoalY = 125;
   Brain.Screen.setFont(mono20);
   bool light = true;
   if(AutoMode == 0) { // 左邊
@@ -224,8 +225,7 @@ void  brainScreen(int AutoMode) {
     bool Link = m[i].installed();
     int Temperature = m[i].temperature();
     int face = 0;
-    char *Temp;
-    int x,y;
+    const char *Temp;
     if(Temperature <= 40) {
       Temp = "Green";
     } else if (Temperature <= 50) {
@@ -261,8 +261,7 @@ void  brainScreen(int AutoMode) {
   for(int i = 0; i<5; i++) {
     bool Link = m2[i].installed();
     int Temperature = m2[i].temperature();
-    char *Temp;
-    int x,y;
+    const char *Temp;
     if(Temperature <= 40) {
       Temp = "Green";
     } else if (Temperature <= 50) {
