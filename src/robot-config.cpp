@@ -15,8 +15,8 @@ motor RBMotor = motor(PORT9, ratio6_1, false);
 motor LLift = motor(PORT3, ratio6_1, true);     // DR$B 升降機 
 motor RLift = motor(PORT8, ratio6_1, false);
 motor Claw = motor(PORT6, ratio18_1, false);
-motor LToggle = motor(PORT11, ratio18_1, true); // Toggle 
-motor RToggle = motor(PORT20, ratio18_1, false);
+motor LToggle = motor(PORT11, ratio18_1, false); // Toggle 
+motor RToggle = motor(PORT20, ratio18_1, true);
 
 bumper bpAuto = bumper(Brain.ThreeWirePort.A);   // Limit Switch
 inertial IMU = inertial(PORT4);                 // Inertial 

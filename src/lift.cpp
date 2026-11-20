@@ -8,7 +8,7 @@ Lift::Lift(motor_group LiftInput):
 }
 
 
-int Lift::LiftTo() { // Dr4B 不適合用追角度的方法控制
+void Lift::LiftTo() { // Dr4B 不適合用追角度的方法控制
     const int offset = 500;
     const int MaxDeg = 3000; // 最大角度
     int HeightError = 0;
@@ -31,20 +31,17 @@ int Lift::LiftTo() { // Dr4B 不適合用追角度的方法控制
         wait(20,msec);
     }
 }
-int Lift::controlLift() {
+void Lift::controlLift() {
     while (true) {
-        if(Controller.ButtonL1.pressing()) 
-        {
+        if(Controller.ButtonL1.pressing()) {
             DRLift.spin(forward,12,volt);
             DRLift.setStopping(hold);
-        } 
-        else if(Controller.ButtonL2.pressing()) 
-        {
+        } else if(Controller.ButtonL2.pressing()) {
             DRLift.spin(forward,-3,volt);
             DRLift.setStopping(coast);
-        } 
-        else 
-        {
+        } else if(DRLift.position(deg) < 300) {
+            DRLift.stop(coast);
+        } else {
             DRLift.stop();
         }
         wait(20,msec);
@@ -56,12 +53,4 @@ void Lift::Score() {
 }
 void Lift::stop() {
     DRLift.stop(hold);
-}
-
-int Lift::controlLiftTask() {
-    return MyLift.controlLift();
-}
-
-int Lift::LiftToTask() {
-    return MyLift.LiftTo();
 }

@@ -3,16 +3,11 @@
 int rachet() // TODO: 不要手動開合，不好用
 {
   while(1) {
-    if(Controller.ButtonR2.pressing())
-    {
+    if(Controller.ButtonR2.pressing()) {
       Claw.spin(forward, -47.5, pct);
-    } 
-    else if(Controller.ButtonR1.pressing()) 
-    {
+    } else if(Controller.ButtonR1.pressing()) {
       Claw.spin(forward,100, pct);
-    } 
-    else 
-    {
+    } else {
       Claw.stop(hold);
     }
     wait(20,msec);
