@@ -1,5 +1,5 @@
 #include "vex.h"
-
+#include "cstring"
 void drawMotor(int StrX, int StrY, int Buff) {
   Brain.Screen.setPenWidth(0); 
   for (int i = 0; i < 28; i++) {       
