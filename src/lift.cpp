@@ -1,5 +1,5 @@
 #include "vex.h"
-
+  
 Lift::Lift(motor_group LiftInput):
  DRLift(LiftInput)
 {
