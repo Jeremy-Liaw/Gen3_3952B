@@ -1,6 +1,9 @@
 #pragma once
 using namespace vex;
 
+class drive;
+class Lift;
+
 extern competition Competition;
 extern controller Controller;
 extern brain Brain;
@@ -12,10 +15,11 @@ extern motor LLift;
 extern motor RLift;
 extern motor Claw;
 extern bumper bpAuto;
-extern inertial Inertial;
+extern inertial IMU;
 extern motor LToggle;
 extern motor RToggle; 
 extern motor_group toggle;
-extern motor_group Lift;
+extern Lift MyLift;
+extern drive MyChassis;
 
 void  vexcodeInit( void );

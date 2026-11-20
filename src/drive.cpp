@@ -1,5 +1,4 @@
 #include "vex.h"    
-#include "drive.h"
 using namespace vex;
 
 
@@ -14,7 +13,7 @@ double GoalTKd = 30;
 drive::drive(motor_group LMotorInput, motor_group RMotorInput,inertial IMUInput)://建構子 drive::drive 同名
   LMotor(LMotorInput),
   RMotor(RMotorInput),
-  IMU(IMUInput)
+  DriveIMU(IMUInput)
 {
 
 }
@@ -34,7 +33,7 @@ void drive::turn(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVo
   printf("-------------------------\n");
   printf("turn to Goal = %.2f Deg\n",Goal);
   while(true){
-    double Error = Goal - IMU.heading(); // 距離目標還有幾度
+    double Error = Goal - DriveIMU.heading(); // 距離目標還有幾度
     // printf("error = %.2f, IMU = %.2f\n",Error,IMU.heading());
     Error = to180(Error); // 將角度縮減-180到180度
     if(fabs(Error) < 15){ // 計算 I 如果角度一直停留在很接近的角度，就需要增加速度 
@@ -97,18 +96,18 @@ void drive::goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,i
   int SettleCounter = 0; // 判斷到目標時間
   int TimeCount = 0; // 計時器
   double KeepDeg = 0;
-  if (DegTar == -9999){ KeepDeg = IMU.heading(); }
+  if (DegTar == -9999){ KeepDeg = DriveIMU.heading(); }
   else{ KeepDeg = DegTar; }
-  LMotor.resetPosition();
-  RMotor.resetPosition();
+  double StrLMotor = LMotor.position(deg);
+  double StrRMotor = RMotor.position(deg);
   printf("-------------------------\n");
   printf("go to dis = %.2f Inch\n",Goal);
   while(true){
-    double AveDeg = (LMotor.position(deg) + RMotor.position(deg)) / 2; // 馬達平均旋轉角度
+    double AveDeg = ((LMotor.position(deg) - StrLMotor) + (RMotor.position(deg) - StrRMotor)) / 2; // 馬達平均旋轉角度
     double CurrentDistance = (AveDeg / 360) * (3.14159 * 2.75) * (36.0 / 48.0); // 單位換算 角度換英吋 
     // (AveDeg / 360)馬達圈數 (36.0 / 48.0)換成輪子的圈數 (3.14159 * 2.75)輪子轉一圈的距離
     double Error = Goal - CurrentDistance; // 到目標還有多遠
-    double HeadingError = KeepDeg - IMU.heading(); // 車子角度的誤差
+    double HeadingError = KeepDeg - DriveIMU.heading(); // 車子角度的誤差
     HeadingError = to180(HeadingError); // 將角度縮減-180到180度
     double Correction = HeadingError * 0.2; // 乘上常數降低速度
     if(fabs(Error) < 2) { 
@@ -161,7 +160,7 @@ void drive::swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int 
   printf("Goal = %.2f Deg\n",Goal);
   printf("-------------------------\n");
   while(true){
-    double Error = Goal - IMU.heading(); 
+    double Error = Goal - DriveIMU.heading(); 
     Error = to180(Error); 
     if(fabs(Error) < 15){
       AddError += Error;
@@ -215,7 +214,7 @@ void drive::swingRight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int
   printf("Goal = %.2f Deg\n",Goal);
   printf("-------------------------\n");
   while(true){
-    double Error = Goal - IMU.heading(); 
+    double Error = Goal - DriveIMU.heading(); 
     Error = to180(Error); 
     if(fabs(Error) < 15){
       AddError += Error;
@@ -261,6 +260,7 @@ void drive::controlMove() {
   double P1 = deadband(Controller.Axis1.position() * 0.9,5);
   LMotor.spin(fwd, toVolt(P3+P1), volt);
   RMotor.spin(fwd, toVolt(P3-P1), volt);
+  printf("Claw Pos = %.2f\n\n",Claw.position(deg));
 }
 
 void drive::stop() {

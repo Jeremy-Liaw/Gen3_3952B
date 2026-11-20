@@ -8,7 +8,7 @@ class drive{
   public: 
     motor_group LMotor;
     motor_group RMotor;
-    inertial IMU;
+    inertial DriveIMU;
     drive(motor_group LMotorInput, motor_group RMotorInput,inertial IMUInput);//建構子
     // 原地旋轉
     void turn(double Goal,int Maxvolt);

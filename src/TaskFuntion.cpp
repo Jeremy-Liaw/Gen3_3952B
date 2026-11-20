@@ -1,35 +1,15 @@
 #include "vex.h"
-int DRlift()
-{
-  while(1) 
-  {
-    if(Controller.ButtonL1.pressing()) 
-    {
-      Lift.spin(forward, 70, pct);
-    } 
-    else if(Controller.ButtonL2.pressing()) 
-    {
-      Lift.stop(coast);
-    } 
-    else 
-    {
-      Lift.stop(hold);
-    }
-    wait(20,msec);
-  }
-  return 0; 
-}
 
 int rachet() // TODO: 不要手動開合，不好用
 {
   while(1) {
     if(Controller.ButtonR2.pressing())
     {
-      Claw.spin(forward, 47.5, pct);
+      Claw.spin(forward, -47.5, pct);
     } 
     else if(Controller.ButtonR1.pressing()) 
     {
-      Claw.spin(reverse,100, pct);
+      Claw.spin(forward,100, pct);
     } 
     else 
     {

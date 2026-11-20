@@ -10,11 +10,12 @@
 #include "TaskFuntion.h"
 #include "robot-config.h"
 #include "drive.h"
+#include "lift.h"
 #include "tool.h"
 
 #include "autons.h"
 #include "screen.h"
-
+#include "cstring"
 
 extern int AutoEnd;
 extern int LiftPos;

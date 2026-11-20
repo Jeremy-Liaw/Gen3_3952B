@@ -53,9 +53,10 @@ void autonomous(void) {
 void usercontrol(void) {
   StrAuto = true;
   Brain.Screen.clearScreen();
-  task liftTask(DRlift);
   task rachetTask(rachet);
   task toggleTask(toggleSide);
+  task controlLiftTask(Lift::controlLiftTask);
+  task LiftToTask(Lift::LiftToTask);
   //task LiftPosTask(liftTo);
   while (1) {
     MyChassis.controlMove(); // 底盤遙控  之後要加遙控曲線
