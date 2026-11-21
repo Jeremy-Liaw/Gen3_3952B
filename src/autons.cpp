@@ -24,8 +24,8 @@ void autoInit()
     Claw.setPosition(0,deg);
     toggle.setPosition(0,deg);
     Claw.setVelocity(100,pct);
-    toggle.setVelocity(100,pct);
-    
+    toggle.setVelocity(75,pct);
+    MyLift.DRLift.setVelocity(100,pct);
 }
 
 void autoStop()
@@ -64,27 +64,31 @@ void autoStop()
 //     }
 // }
 void runCase(bool isLeft) { 
-
+    int rev = (isLeft) ? 1:-1;
+    autoInit();
+    toggle.spinFor(forward,360,deg,false);
+    MyLift.DRLift.spinTo(475,deg,true);
+    MyChassis.goStraight(26.5,40 * rev,9.5,1000);
+    MyLift.DRLift.stop(coast);
+    wait(1,sec);
+    Claw.spin(forward,-100,pct);
+    wait(2.6,sec);
+    MyChassis.goStraight(-10,1000);
+    autoStop();
 }
 void runCase1() { // 左邊
-    autoInit();
-    SCORE = true; // 觸發得分
-    wait(2,sec);
-    MyChassis.goStraight(1,6,5000);
-    wait(10,sec);
-    autoStop();
+    MyChassis.turn(90,8000);
 }
 void runCase2() { // 右邊
-    autoInit();
     runCase(false);
-    autoStop();
 }
 void runCase3() {
-    MyChassis.turn(270,12);
+    autoInit();
+    MyChassis.turn(90,3000);
     autoStop();
 }
 void runCase4() {
-    MyChassis.turn(180,12);
+    MyChassis.turn(180,3000);
     autoStop();
 }
 

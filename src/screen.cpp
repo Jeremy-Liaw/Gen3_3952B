@@ -125,6 +125,22 @@ void drawCchannel(int StrX, int StrY, int Buff) {
     }
   }
 }
+void drawautonsChoice(int StrX, int StrY, int Buff,int mode) {
+  Brain.Screen.setPenWidth(0);
+  for(int i = 0; i<8; i++) { 
+    for(int j = 0; j<12; j++) {
+      int ColorCode = autonsChoiceMap[mode][i][j];
+      if(ColorCode == 2) continue;
+      switch (ColorCode){
+        case 0: Brain.Screen.setFillColor(color(255, 255, 255)); break;
+        case 1: Brain.Screen.setFillColor(color(74, 74, 74)); break;
+        // case 2: Brain.Screen.setFillColor(color(180, 180, 180)); break;
+      }
+      Brain.Screen.drawRectangle(StrX + j * Buff, StrY + i * Buff, Buff, Buff);
+    }
+  }
+  Brain.Screen.setFillColor(transparent);
+}
 int time0;
 int count = 0;
 void  brainScreen(int AutoMode) {
@@ -176,26 +192,35 @@ void  brainScreen(int AutoMode) {
   Brain.Screen.printAt(65,85,"[Auto Mode]");
   Brain.Screen.setFont(mono15);
   Brain.Screen.printAt(65,115,"Team Goal at ?");
-  int GoalX = 0, GrayX = 0, GoalY = 125;
+  // int GoalX = 0, GrayX = 0, GoalY = 125;
   Brain.Screen.setFont(mono20);
-  bool light = true;
-  if(AutoMode == 0) { // 左邊
-    GoalX = 41; GrayX = 161;
-    Brain.Screen.printAt(90,145," Left  ");
-    light = true;
-  } else if(AutoMode == 1) { // 右邊
-    GoalX = 161; GrayX = 41;
-    Brain.Screen.printAt(95,145,"Right ");
-    light = true;
-  } else if(AutoMode == 2) {
-    Brain.Screen.setPenColor(red);
+  // 程式選擇
+  // if(AutoMode == 0) { // 左邊
+  //   GoalX = 41; GrayX = 161;
+  //   Brain.Screen.printAt(90,145," Left  ");
+  // } else if(AutoMode == 1) { // 右邊
+  //   GoalX = 161; GrayX = 41;
+  //   Brain.Screen.printAt(95,145,"Right ");
+  // } else if(AutoMode == 2) {
+  //   Brain.Screen.setPenColor(red); 
+    
+  //   GoalX = 161; GrayX = 41;
+  // }
+  Brain.Screen.setPenWidth(0); // 清除右邊 Goal 的圖案
+  Brain.Screen.setFillColor(black);
+  Brain.Screen.drawRectangle(161, 125, 48, 32);
+  drawTeamGoal(41,125,1,false);// 正常
+  if(AutoMode == 4) {
+    drawTeamGoal(161,125,1,false);
     Brain.Screen.printAt(95,145,"Skill ");
     Brain.Screen.setPenColor(white);
-    GoalX = 161; GrayX = 41;
-    light = false;
+  } else if(AutoMode > 1) {
+    drawautonsChoice(161,125,3,AutoMode);
+    Brain.Screen.printAt(95,145,"  40  ");
+  } else {
+    drawautonsChoice(161,125,3,AutoMode);
+    Brain.Screen.printAt(95,145,"  50  ");
   }
-  drawTeamGoal(GoalX,GoalY,1,false);// 正常
-  drawTeamGoal(GrayX,GoalY,1,light); // 灰階
   // IMU
   bool LinkIMU = IMU.installed();
   Brain.Screen.setFont(mono15);

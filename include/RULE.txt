@@ -1,2 +1,8 @@
 變數命名法則
 小駝峰 goStraight
+大駝峰 GoStraight
+蛇行命名 go_straight
+
+lowerCamelCase: goStraight
+UpperCamelCase: GoStraight
+snake_case: go_straight

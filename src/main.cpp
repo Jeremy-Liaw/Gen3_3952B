@@ -10,7 +10,7 @@
 #include "vex.h"   
 using namespace vex;
 
-int AutoEnd = 3;
+int AutoEnd = 5;
 int AutoMode = 0;
 bool StrAuto = false;
 int LiftPos = 0; // 升降機位置
@@ -61,8 +61,6 @@ void usercontrol(void) {
     MyLift.controlLift();
     wait(20, msec);
   }
-
-
 
 }
 // !---------------------------------------PID測試----------------------------------------------------------

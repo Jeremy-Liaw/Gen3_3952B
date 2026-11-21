@@ -10,14 +10,14 @@ int TestMode = 0;
 bool ReviseGoal = false;
 void CallButtonA() {
   if(TestMode == 0) {
-    MyChassis.IMU.resetHeading();
+    MyChassis.DriveIMU.resetHeading();
     wait(2,sec);
     MyChassis.turn(AngGoal,List[0],List[1],List[2],5000,12);
   } else {
     MyChassis.LMotor.resetPosition();
     MyChassis.RMotor.resetPosition();
     wait(2,sec);
-    MyChassis.goStraight(StrGoal,List[0],List[1],List[2],8000,12);
+    MyChassis.goStraight(StrGoal,-9999,List[0],List[1],List[2],8000,12);
   }
 }
 void CallButtonB() {

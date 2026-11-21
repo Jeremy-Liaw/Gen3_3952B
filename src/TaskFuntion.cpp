@@ -5,7 +5,7 @@ int rachet() // TODO: 不要手動開合，不好用
   while(1) {
     if(Controller.ButtonR2.pressing()) {
       Claw.spin(forward, -47.5, pct);
-    } else if(Controller.ButtonR1.pressing()) {
+    } else if(Controller.ButtonR1.pressing() || Controller.ButtonL1.pressing()) {
       Claw.spin(forward,100, pct);
     } else {
       Claw.stop(hold);
@@ -24,7 +24,7 @@ int toggleSide() //* 開程式前要將 toggle 結構轉成直的
     if(Controller.ButtonY.pressing())
     {
       toggle.setVelocity(100,pct);
-      toggle.spinFor(forward,-180,deg,false);
+      toggle.spinFor(forward,180,deg,false);
       while(Controller.ButtonY.pressing()) {wait(20, msec);}
     } 
     else if(fabs(LModToggle) >= 10)

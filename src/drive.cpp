@@ -1,29 +1,26 @@
 #include "vex.h"    
 using namespace vex;
 
-
-double GoalSKp = 5.3; // 預設值
-double GoalSKi = 0.01;
-double GoalSKd = 15;
-
-double GoalTKp = 4;
-double GoalTKi = 0.04;
-double GoalTKd = 30;
-
 drive::drive(motor_group LMotorInput, motor_group RMotorInput,inertial IMUInput)://建構子 drive::drive 同名
   LMotor(LMotorInput),
   RMotor(RMotorInput),
   DriveIMU(IMUInput)
 {
-
+  StraightKp = 5;
+  StraightKi = 0.001;
+  StraightKd = 0;
+  TurnKp = 4;
+  TurnKi = 0.001;
+  TurnKd = 5.5;
+  Maxvolt = 12;
 }
 
-void drive::turn(double Goal,int Maxvolt) // 多載(可以用多種方呼叫函式(分別輸入不同參數))
+void drive::turn(double Goal,int Timeout) // 多載(可以用多種方呼叫函式(分別輸入不同參數))
 {
-  turn( Goal,GoalTKp,GoalTKi,GoalTKd,3000,Maxvolt);
+  turn( Goal,TurnKp,TurnKi,TurnKd,Timeout,Maxvolt);
 }
 void drive::turn(double Goal,double Kd,int Timeout){ // 多載(可以用多種方呼叫函式(分別輸入不同參數))
-  turn( Goal,GoalTKp,GoalTKi,Kd,Timeout,12 );
+  turn( Goal,TurnKp,TurnKi,Kd,Timeout,Maxvolt );
 }
 void drive::turn(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt){
   double LastError = 0; // 上次誤差
@@ -37,7 +34,7 @@ void drive::turn(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVo
     // printf("error = %.2f, IMU = %.2f\n",Error,IMU.heading());
     Error = to180(Error); // 將角度縮減-180到180度
     if(fabs(Error) < 15){ // 計算 I 如果角度一直停留在很接近的角度，就需要增加速度 
-      AddError += Error;
+      AddError += Error; 
     }
     else if((Error > 0 && LastError < 0) || (Error < 0 && LastError > 0)){ // 如果轉過 0 度時要將累積誤差歸零(方向不同)
       AddError = 0;
@@ -81,13 +78,13 @@ void drive::turn(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVo
 
 // 增加的功能：角度自訂 (如果想走弧線可以自己設定角度)
 // 如果 DegTaar 填入 -9999 代表不改變角度，保持原本的角度
-void drive::goStraight(double Goal,int Maxvolt,int TimeOut) // 加上 drive 可以把在 class 內宣告過的方法在外面編輯 (畫面更節儉)
+void drive::goStraight(double Goal, int TimeOut) // 加上 drive 可以把在 class 內宣告過的方法在外面編輯 (畫面更節儉)
 {
-  goStraight(Goal,-9999,GoalTKp,GoalTKi,GoalTKd,TimeOut,Maxvolt);
+  goStraight(Goal,-9999,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt);
 }
 void drive::goStraight(double Goal,double DegTar,double Kd,int TimeOut)
 {
-  goStraight(Goal,DegTar,GoalTKp,GoalTKi,Kd,TimeOut,12);
+  goStraight(Goal,DegTar,StraightKp,StraightKi,Kd,TimeOut,Maxvolt);
 }
 void drive::goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt)
 {
@@ -147,9 +144,9 @@ void drive::goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,i
   }
 }
 
-void drive::swingLift(double Goal) 
+void drive::swingLift(double Goal, int TimeOut) 
 {
-  swingLift(Goal,GoalSKp,GoalSKi,GoalSKd,8000,12);
+  swingLift(Goal,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt);
 }
 void drive::swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt) 
 {
@@ -201,9 +198,9 @@ void drive::swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int 
     wait(10,msec);
   }
 }
-void drive::swingRight(double Goal) 
+void drive::swingRight(double Goal, int TimeOut) 
 {
-  swingRight(Goal,GoalSKp,GoalSKi,GoalSKd,8000,12);
+  swingRight(Goal,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt);
 }
 void drive::swingRight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt) 
 {
@@ -260,7 +257,6 @@ void drive::controlMove() {
   double P1 = deadband(Controller.Axis1.position() * 0.9,5);
   LMotor.spin(fwd, toVolt(P3+P1), volt);
   RMotor.spin(fwd, toVolt(P3-P1), volt);
-  printf("Claw Pos = %.2f\n\n",Claw.position(deg));
 }
 
 void drive::stop() {
