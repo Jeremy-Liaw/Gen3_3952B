@@ -13,6 +13,7 @@ class drive{
     double StraightKp;
     double StraightKi;
     double StraightKd;
+    double StraightKc;
     double TurnKp;
     double TurnKi;
     double TurnKd;
@@ -25,8 +26,9 @@ class drive{
     // 直走一段距離
 
     void goStraight(double Goal, int TimeOut);
-    void goStraight(double Goal, double DegTar, double Kd, int TimeOut);
-    void goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt);   
+    void goStraight(double Goal, int TimeOut, double DegTar);
+    void goStraight(double Goal, double Kd, int TimeOut, double DegTar);
+    void goStraight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt,double DegTar);   
     // 單輪轉
     void swingLift(double Goal, int TimeOut);
     void swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt);    

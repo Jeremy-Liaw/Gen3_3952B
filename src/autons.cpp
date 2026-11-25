@@ -67,29 +67,21 @@ void runCase(bool isLeft) {
     int rev = (isLeft) ? 1:-1;
     autoInit();
     toggle.spinFor(forward,360,deg,false);
-    MyLift.DRLift.spinTo(475,deg,true);
-    MyChassis.goStraight(26.5,40 * rev,9.5,1000);
-    MyLift.DRLift.stop(coast);
-    wait(1,sec);
-    Claw.spin(forward,-100,pct);
-    wait(2.6,sec);
-    MyChassis.goStraight(-10,1000);
+    wait(2,sec);
+    // 剩下交給明天的我
     autoStop();
 }
 void runCase1() { // 左邊
-    MyChassis.turn(90,8000);
+    runCase(true);
 }
 void runCase2() { // 右邊
     runCase(false);
 }
 void runCase3() {
-    autoInit();
-    MyChassis.turn(90,3000);
-    autoStop();
+
 }
 void runCase4() {
-    MyChassis.turn(180,3000);
-    autoStop();
+
 }
 
 void skills() {

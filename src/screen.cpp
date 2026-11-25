@@ -216,10 +216,10 @@ void  brainScreen(int AutoMode) {
     Brain.Screen.setPenColor(white);
   } else if(AutoMode > 1) {
     drawautonsChoice(161,125,3,AutoMode);
-    Brain.Screen.printAt(95,145,"  40  ");
+    Brain.Screen.printAt(95,145,"Case2");
   } else {
     drawautonsChoice(161,125,3,AutoMode);
-    Brain.Screen.printAt(95,145,"  50  ");
+    Brain.Screen.printAt(95,145,"Case1 ");
   }
   // IMU
   bool LinkIMU = IMU.installed();

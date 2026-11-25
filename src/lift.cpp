@@ -35,7 +35,7 @@ void Lift::controlLift() {
         DRLift.spin(forward,12,volt);
         DRLift.setStopping(hold);
     } else if(Controller.ButtonL2.pressing()) {
-        DRLift.spin(forward,-3,volt);
+        DRLift.spin(forward,-1.5,volt);
         DRLift.setStopping(coast);
     } else if(DRLift.position(deg) < 300) {
         DRLift.stop(coast);
@@ -43,9 +43,7 @@ void Lift::controlLift() {
         DRLift.stop();
     }
     wait(20,msec);
-    
 }
-
 void Lift::Score() {
 
 }

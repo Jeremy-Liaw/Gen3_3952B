@@ -6,12 +6,13 @@ drive::drive(motor_group LMotorInput, motor_group RMotorInput,inertial IMUInput)
   RMotor(RMotorInput),
   DriveIMU(IMUInput)
 {
-  StraightKp = 5;
-  StraightKi = 0.001;
-  StraightKd = 0;
-  TurnKp = 4;
-  TurnKi = 0.001;
-  TurnKd = 5.5;
+  StraightKp = 8;
+  StraightKi = 0;
+  StraightKd = 25;
+  StraightKc  = 0.2;
+  TurnKp = 5;
+  TurnKi = 0.2;
+  TurnKd = 39.5;
   Maxvolt = 12;
 }
 
@@ -27,7 +28,7 @@ void drive::turn(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVo
   double AddError = 0;  //累積誤差
   int SettleCounter = 0; // 判斷到目標時間
   int TimeCount = 0; // 計時器
-  printf("-------------------------\n");
+  printf("--------------------------------------------------\n");
   printf("turn to Goal = %.2f Deg\n",Goal);
   while(true){
     double Error = Goal - DriveIMU.heading(); // 距離目標還有幾度
@@ -58,16 +59,16 @@ void drive::turn(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVo
     TimeCount+=10; // 計時器增加
     if(SettleCounter > 100){ // 發現真的到目標就可以離開迴圈
       printf("success! error =  %.2f Deg,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
-      printf("---------------------------------------------------------------------------------\n");
+      printf("Kp = %.1f, Ki = %.3f, Kd = %.1f\n",Kp,Ki,Kd);
+      printf("--------------------------------------------------\n");
       LMotor.stop(brake);
       RMotor.stop(brake);
       break;
     }
     if(TimeCount >= TimeOut){ // 超時
       printf("overtime! error = %.2f Deg,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
-      printf("---------------------------------------------------------------------------------\n");
+      printf("Kp = %.1f, Ki = %.3f, Kd = %.1f\n",Kp,Ki,Kd);
+      printf("--------------------------------------------------\n");
       LMotor.stop(brake);
       RMotor.stop(brake);
       break;
@@ -80,24 +81,31 @@ void drive::turn(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVo
 // 如果 DegTaar 填入 -9999 代表不改變角度，保持原本的角度
 void drive::goStraight(double Goal, int TimeOut) // 加上 drive 可以把在 class 內宣告過的方法在外面編輯 (畫面更節儉)
 {
-  goStraight(Goal,-9999,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt);
+  goStraight(Goal,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt,-9999);
 }
-void drive::goStraight(double Goal,double DegTar,double Kd,int TimeOut)
+void drive::goStraight(double Goal, int TimeOut, double DegTar)
 {
-  goStraight(Goal,DegTar,StraightKp,StraightKi,Kd,TimeOut,Maxvolt);
+  goStraight(Goal,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt,DegTar);
 }
-void drive::goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt)
+void drive::goStraight(double Goal,double Kd,int TimeOut,double DegTar)
+{
+  goStraight(Goal,StraightKp,StraightKi,Kd,TimeOut,Maxvolt,DegTar);
+}
+void drive::goStraight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt,double DegTar)
 {
   double AddError = 0; // 累積誤差
   double LastError = 0; // 上次誤差
   int SettleCounter = 0; // 判斷到目標時間
   int TimeCount = 0; // 計時器
   double KeepDeg = 0;
-  if (DegTar == -9999){ KeepDeg = DriveIMU.heading(); }
-  else{ KeepDeg = DegTar; }
+  if (DegTar == -9999) { 
+    KeepDeg = DriveIMU.heading(); 
+  } else { 
+    KeepDeg = DegTar; 
+  }
   double StrLMotor = LMotor.position(deg);
   double StrRMotor = RMotor.position(deg);
-  printf("-------------------------\n");
+  printf("--------------------------------------------------\n");
   printf("go to dis = %.2f Inch\n",Goal);
   while(true){
     double AveDeg = ((LMotor.position(deg) - StrLMotor) + (RMotor.position(deg) - StrRMotor)) / 2; // 馬達平均旋轉角度
@@ -106,7 +114,7 @@ void drive::goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,i
     double Error = Goal - CurrentDistance; // 到目標還有多遠
     double HeadingError = KeepDeg - DriveIMU.heading(); // 車子角度的誤差
     HeadingError = to180(HeadingError); // 將角度縮減-180到180度
-    double Correction = HeadingError * 0.2; // 乘上常數降低速度
+    double Correction = HeadingError * StraightKc; // 乘上常數降低速度
     if(fabs(Error) < 2) { 
       AddError += Error;
     } else if((Error > 0 && LastError < 0) || (Error < 0 && LastError > 0)){ 
@@ -130,14 +138,14 @@ void drive::goStraight(double Goal,double DegTar,double Kp,double Ki,double Kd,i
     TimeCount+=10; // 計時器增加
     if(SettleCounter > 100){ // 到目標了
       printf("success! Error =  %.2f Inch,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
-      printf("---------------------------------------------------------------------------------\n");
+      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f, Heading = %.2f\n",Kp,Ki,Kd,DriveIMU.heading());
+      printf("--------------------------------------------------\n");
       break;
     }
     if(TimeCount >= TimeOut){ // 超時
       printf("overtime! Error = %.2f Inch,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
-      printf("---------------------------------------------------------------------------------\n");
+      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f, Heading = %.2f\n",Kp,Ki,Kd,DriveIMU.heading());
+      printf("--------------------------------------------------\n");
       break;
     }
     wait(10,msec);
