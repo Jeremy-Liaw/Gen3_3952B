@@ -26,12 +26,13 @@ void autoInit()
     Claw.setVelocity(100,pct);
     toggle.setVelocity(75,pct);
     MyLift.DRLift.setVelocity(100,pct);
+    task UpDownLiftTask(UpDownLift);
 }
 
 void autoStop()
 {
-    Claw.stop(hold);
-    toggle.stop(hold);
+    Claw.stop(coast);
+    toggle.stop(coast);
     MyLift.stop();
     MyChassis.stop();
     printf("Auto Stop\n");
@@ -66,15 +67,22 @@ void autoStop()
 void runCase(bool isLeft) { 
     int rev = (isLeft) ? 1:-1;
     autoInit();
-    toggle.spinFor(forward,360,deg,false);
-    wait(2,sec);
-    // 剩下交給明天的我
+    // toggle.spinFor(forward,360,deg); // 轉 Toggle
+    MyChassis.swingLift(37,500);    // 轉到 Goal 的角度
+    MyLift.SetLift(true,200);       // 同時升起升降機
+    MyChassis.goStraight(15.5,35,700,-9999);// 走到 Goal
+    wait(2,sec);    //TODO 開爪 只放一顆 Pin 不能直接降升降機 記得開爪
+    MyLift.SetLift(false,700);
+    MyChassis.goStraight(-5,600); // 後退一點
+    MyChassis.turn(-47,800);      // 轉到牆邊 Pin + Cup
+    MyChassis.goStraight(7,1000); // 走到牆邊
+    // 轉 Intake 吸牆邊 Pin + Cup
     autoStop();
 }
-void runCase1() { // 左邊
+void runCase1() { // 聯隊 Goal 在左邊
     runCase(true);
 }
-void runCase2() { // 右邊
+void runCase2() { // 聯隊 Goal 在右邊
     runCase(false);
 }
 void runCase3() {

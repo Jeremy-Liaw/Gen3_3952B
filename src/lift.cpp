@@ -6,29 +6,10 @@ Lift::Lift(motor_group LiftInput):
     LiftHeight = 0; 
     TargetDeg = 0;
 }
-
-void Lift::LiftTo() { // Dr4B 不適合用追角度的方法控制
-    const int offset = 500;
-    const int MaxDeg = 3000; // 最大角度
-    int HeightError = 0;
-    while(true){
-        if (TargetDeg > MaxDeg) {
-            TargetDeg = MaxDeg;
-        } else if (TargetDeg < 0) {
-            TargetDeg = 0;
-        }
-        HeightError = TargetDeg - DRLift.position(deg); // 計算誤差
-        int buff = 0;
-        if(HeightError < 0) {
-            buff = 50;
-        }
-        double output = toVolt((HeightError * 0.8) + buff);
-        DRLift.spin(forward,output,volt);
-        if (abs(HeightError) < offset) {
-            DRLift.stop(hold);
-        }
-        wait(20,msec);
-    }
+void Lift::SetLift(bool Dir, int DirTime) {
+    TaskDir = Dir;
+    TaskDirTime = DirTime;
+    LiftStar = true;
 }
 void Lift::controlLift() {
     if(Controller.ButtonL1.pressing()) {

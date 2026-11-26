@@ -1,4 +1,7 @@
 #include "vex.h"
+bool TaskDir = 0;   
+bool LiftStar = false;  
+int TaskDirTime = 0;
 
 int rachet() // TODO: 不要手動開合，不好用
 {
@@ -38,4 +41,32 @@ int toggleSide() //* 開程式前要將 toggle 結構轉成直的
     wait(20, msec);
   }
   return 0;
+}
+int UpDownLift() {
+    int time0 = Brain.Timer.time();
+    bool first = true;
+    while(1) {
+      if(LiftStar) {
+        if(first) {
+          first = false;
+          time0 = Brain.Timer.time();
+          if(TaskDir)
+            MyLift.DRLift.spin(forward,12,volt);
+          else
+            MyLift.DRLift.spin(forward,-1.5,volt);
+        } else {
+          if(Brain.Timer.time() - time0 >= TaskDirTime) {
+              LiftStar = false;
+              if(MyLift.DRLift.position(deg) < 300) {
+                  MyLift.DRLift.stop(coast);
+              } else {
+                  MyLift.DRLift.stop(hold);
+              }
+          }          
+        }
+      } else {
+        first = true;
+      }
+      wait(20,msec);
+    }
 }

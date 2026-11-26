@@ -209,7 +209,7 @@ void  brainScreen(int AutoMode) {
   Brain.Screen.setPenWidth(0); // 清除右邊 Goal 的圖案
   Brain.Screen.setFillColor(black);
   Brain.Screen.drawRectangle(161, 125, 48, 32);
-  drawTeamGoal(41,125,1,false);// 正常
+  drawTeamGoal(41,125,1,false);// 
   if(AutoMode == 4) {
     drawTeamGoal(161,125,1,false);
     Brain.Screen.printAt(95,145,"Skill ");

@@ -13,6 +13,9 @@ drive::drive(motor_group LMotorInput, motor_group RMotorInput,inertial IMUInput)
   TurnKp = 5;
   TurnKi = 0.2;
   TurnKd = 39.5;
+  SwingKp = 5;   
+  SwingKi = 0.1; 
+  SwingKd = 43;
   Maxvolt = 12;
 }
 
@@ -154,7 +157,7 @@ void drive::goStraight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int
 
 void drive::swingLift(double Goal, int TimeOut) 
 {
-  swingLift(Goal,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt);
+  swingLift(Goal,SwingKp,SwingKi,SwingKd,TimeOut,Maxvolt);
 }
 void drive::swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt) 
 {
@@ -162,7 +165,7 @@ void drive::swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int 
   double AddError = 0;  
   int SettleCounter = 0; 
   int TimeCount = 0; 
-  printf("Goal = %.2f Deg\n",Goal);
+  printf("swingLift Goal = %.2f Deg\n",Goal);
   printf("-------------------------\n");
   while(true){
     double Error = Goal - DriveIMU.heading(); 
@@ -193,14 +196,18 @@ void drive::swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int 
     if(SettleCounter > 100){
 
       printf("success! error =  %.2f Deg,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
-      printf("---------------------------------------------------------------------------------\n");
+      printf("Kp = %.1f, Ki = %.3f, Kd = %.1f\n",Kp,Ki,Kd);
+      printf("--------------------------------------------------\n");
+      LMotor.stop(brake);
+      RMotor.stop(brake);
       break;
     }
     if(TimeCount >= TimeOut){ 
       printf("overtime! error = %.2f Deg,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
-      printf("---------------------------------------------------------------------------------\n");
+      printf("Kp = %.1f, Ki = %.3f, Kd = %.1f\n",Kp,Ki,Kd);
+      printf("--------------------------------------------------\n");
+      LMotor.stop(brake);
+      RMotor.stop(brake);
       break;
     }
     wait(10,msec);
@@ -208,7 +215,7 @@ void drive::swingLift(double Goal,double Kp,double Ki,double Kd,int TimeOut,int 
 }
 void drive::swingRight(double Goal, int TimeOut) 
 {
-  swingRight(Goal,StraightKp,StraightKi,StraightKd,TimeOut,Maxvolt);
+  swingRight(Goal,SwingKp,SwingKi,SwingKd,TimeOut,Maxvolt);
 }
 void drive::swingRight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int MaxVolt) 
 {
@@ -216,7 +223,7 @@ void drive::swingRight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int
   double AddError = 0;  
   int SettleCounter = 0; 
   int TimeCount = 0; 
-  printf("Goal = %.2f Deg\n",Goal);
+  printf("swingRight Goal = %.2f Deg\n",Goal);
   printf("-------------------------\n");
   while(true){
     double Error = Goal - DriveIMU.heading(); 
@@ -246,14 +253,18 @@ void drive::swingRight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int
     TimeCount+=10; 
     if(SettleCounter > 100){
       printf("success! error =  %.2f Deg,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
+      printf("Kp = %.1f, Ki = %.3f, Kd = %.1f\n",Kp,Ki,Kd);
       printf("---------------------------------------------------------------------------------\n");
+      LMotor.stop(brake);
+      RMotor.stop(brake);
       break;
     }
     if(TimeCount >= TimeOut){ 
       printf("overtime! error = %.2f Deg,spend %.1f s\n",Error,TimeCount/1000.0);
-      printf("Kp = %.1f, Ki = %.1f, Kd = %.1f\n",Kp,Ki,Kd);
+      printf("Kp = %.1f, Ki = %.3f, Kd = %.1f\n",Kp,Ki,Kd);
       printf("---------------------------------------------------------------------------------\n");
+      LMotor.stop(brake);
+      RMotor.stop(brake);
       break;
     }
     wait(10,msec);
@@ -268,6 +279,6 @@ void drive::controlMove() {
 }
 
 void drive::stop() {
-  LMotor.stop();
-  RMotor.stop();
+  LMotor.stop(coast);
+  RMotor.stop(coast);
 }

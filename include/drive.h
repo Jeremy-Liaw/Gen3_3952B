@@ -17,6 +17,9 @@ class drive{
     double TurnKp;
     double TurnKi;
     double TurnKd;
+    double SwingKp;
+    double SwingKi;
+    double SwingKd;
     int Maxvolt;
     drive(motor_group LMotorInput, motor_group RMotorInput,inertial IMUInput);//建構子
     // 原地旋轉
