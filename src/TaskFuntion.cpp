@@ -11,7 +11,7 @@ int rachet() // TODO: 不要手動開合，不好用
     } else if(Controller.ButtonR1.pressing() || Controller.ButtonL1.pressing()) {
       Claw.spin(forward,100, pct);
     } else {
-      Claw.stop(hold);
+      Claw.stop(coast);
     }
     wait(20,msec);
   }

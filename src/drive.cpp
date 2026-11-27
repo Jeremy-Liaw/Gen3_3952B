@@ -6,16 +6,16 @@ drive::drive(motor_group LMotorInput, motor_group RMotorInput,inertial IMUInput)
   RMotor(RMotorInput),
   DriveIMU(IMUInput)
 {
-  StraightKp = 8;
-  StraightKi = 0;
-  StraightKd = 25;
-  StraightKc  = 0.2;
   TurnKp = 5;
-  TurnKi = 0.2;
-  TurnKd = 39.5;
+  TurnKi = 0.1;
+  TurnKd = 30.5;
+  StraightKp = 8.5;
+  StraightKi = 0.2;
+  StraightKd = 40;
+  StraightKc  = 0.2;
   SwingKp = 5;   
-  SwingKi = 0.1; 
-  SwingKd = 43;
+  SwingKi = 0; 
+  SwingKd = 27;
   Maxvolt = 12;
 }
 
@@ -243,7 +243,7 @@ void drive::swingRight(double Goal,double Kp,double Ki,double Kd,int TimeOut,int
 
     LastError = Error;
     LMotor.stop(hold);
-    RMotor.spin(forward,Speed,volt);
+    RMotor.spin(forward,-Speed,volt);
     if(fabs(Error) < 1){ 
       SettleCounter+=10;
     }

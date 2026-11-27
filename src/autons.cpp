@@ -67,12 +67,16 @@ void autoStop()
 void runCase(bool isLeft) { 
     int rev = (isLeft) ? 1:-1;
     autoInit();
-    // toggle.spinFor(forward,360,deg); // 轉 Toggle
-    MyChassis.swingLift(37,500);    // 轉到 Goal 的角度
-    MyLift.SetLift(true,200);       // 同時升起升降機
+    toggle.spinFor(forward,360,deg); // 轉 Toggle
+    if(rev == 1) { // 轉到 Goal 的角度
+        MyChassis.swingLift(37,500);   
+    } else {
+        MyChassis.swingRight(37,500);
+    }
+    // MyLift.SetLift(true,200);       // 同時升起升降機
     MyChassis.goStraight(15.5,35,700,-9999);// 走到 Goal
     wait(2,sec);    //TODO 開爪 只放一顆 Pin 不能直接降升降機 記得開爪
-    MyLift.SetLift(false,700);
+    // MyLift.SetLift(false,700);
     MyChassis.goStraight(-5,600); // 後退一點
     MyChassis.turn(-47,800);      // 轉到牆邊 Pin + Cup
     MyChassis.goStraight(7,1000); // 走到牆邊

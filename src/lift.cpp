@@ -29,5 +29,5 @@ void Lift::Score() {
 
 }
 void Lift::stop() {
-    DRLift.stop(hold);
+    DRLift.stop(coast);
 }

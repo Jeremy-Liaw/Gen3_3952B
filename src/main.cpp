@@ -29,11 +29,11 @@ void pre_auton(void) {
     Brain.Screen.render();
     wait(10,msec);
   }
+  
 }
 
 void autonomous(void) {
   StrAuto = true;
-  Brain.Screen.clearScreen(); // 自動程式開始，螢幕停止更新，所以也要清空螢幕
   switch(AutoMode) {
     case 0:
       runCase1();
@@ -48,15 +48,12 @@ void autonomous(void) {
       runCase4();
       break;
   }
-  
 }
 // !---------------------------------------PID測試----------------------------------------------------------
 void usercontrol(void) {
-  StrAuto = true;
-  Brain.Screen.clearScreen();
   task rachetTask(rachet);
   task toggleTask(toggleSide);
-
+  Brain.Screen.render();
   while (1) {
     MyChassis.controlMove(); // 底盤遙控  之後要加遙控曲線
     MyLift.controlLift();

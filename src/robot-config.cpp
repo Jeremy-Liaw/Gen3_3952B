@@ -14,7 +14,7 @@ motor RBMotor = motor(PORT20, ratio6_1, false);
 
 motor LLift = motor(PORT12, ratio6_1, true);     // DR$B 升降機 
 motor RLift = motor(PORT19, ratio6_1, false);
-motor Claw = motor(PORT6, ratio18_1, true);  // 新車是 false 舊車是 ture
+motor Claw = motor(PORT6, ratio18_1, false);  // 新車是 false 舊車是 ture
 motor LToggle = motor(PORT2, ratio18_1, false); // Toggle 
 motor RToggle = motor(PORT9, ratio18_1, true);
 
